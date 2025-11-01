@@ -67,7 +67,24 @@ The project is configured for Replit Autoscale deployment:
 - Build command: `npm run build`
 - Run command: `npx vite preview --host 0.0.0.0 --port 5000`
 
+## Design System
+- **Color Palette:** Beige/cream background (#f3eee9) with clean white cards
+- **Gradient Buttons:** Teal to pink/coral gradient (linear-gradient(90deg, #6fc6a6 0%, #f3a2a0 100%))
+- **Typography:** Clean, modern sans-serif font with emphasis on readability
+- **Cards:** White cards with subtle shadows and rounded corners
+- **Responsive:** Mobile-first design with responsive grid layouts
+
 ## Recent Changes
+- **2025-11-01:** Complete UI redesign implemented
+  - Redesigned Get Started page with modern, clean aesthetic
+  - Redesigned Login page with centered card layout
+  - Redesigned Register page with improved form layout
+  - Added calendar icon to Date of Birth field
+  - Implemented responsive two-column layout for name fields
+  - Updated all pages with gradient buttons and privacy policy text
+  - Maintained all existing API integrations and form validations
+  - Fixed MUI Grid deprecation warnings by using latest Grid API
+  
 - **2025-11-01:** Initial Replit setup completed
   - Installed all npm dependencies
   - Configured Vite to run on port 5000 with 0.0.0.0 host
