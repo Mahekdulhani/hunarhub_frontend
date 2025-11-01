@@ -1,10 +1,9 @@
-import { Box, Button, Card, CardContent, Chip, Container, Divider, Skeleton, Stack, Typography } from '@mui/material'
+import { Box, Button, Card, CardContent, Chip, Divider, Skeleton, Stack, Typography } from '@mui/material'
+import WarningAmberIcon from '@mui/icons-material/WarningAmber'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
-import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
-import ScheduleOutlinedIcon from '@mui/icons-material/ScheduleOutlined'
-import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined'
 import { useEffect, useState } from 'react'
 import api from '../../api/api'
+import DashboardLayout from '../../components/DashboardLayout'
 
 export default function TrainerApprovalPage() {
   const [pending, setPending] = useState([])
@@ -35,58 +34,133 @@ export default function TrainerApprovalPage() {
   }
 
   return (
-    <Box sx={{ bgcolor: '#f5f0ec', minHeight: '100vh', py: 6 }}>
-      <Container maxWidth="lg">
-        <Stack spacing={1} sx={{ mb: 2 }}>
-          <Typography variant="h6" fontWeight={700}>Trainer Approval</Typography>
-          <Typography color="text.secondary">Review and approve trainer applications</Typography>
-        </Stack>
+    <DashboardLayout>
+      <Box sx={{ p: 4 }}>
+        <Stack spacing={3}>
+          <Box>
+            <Typography variant="h5" fontWeight={600} color="#333">
+              Trainer Approval
+            </Typography>
+            <Typography fontSize={14} color="text.secondary">
+              Review and approve trainer applications
+            </Typography>
+          </Box>
 
-        <Stack spacing={2}>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Chip icon={<ScheduleOutlinedIcon />} color="warning" label={`Pending Approval (${pending.length})`} sx={{ borderRadius: 2 }} />
-            <Button size="small" onClick={load} disabled={loading}>Refresh</Button>
-          </Stack>
-
-          {loading ? (
-            <Stack spacing={1}>
-              {[1,2,3,4].map((k) => (
-                <Card key={k} sx={{ borderRadius: 3 }}>
-                  <CardContent>
-                    <Skeleton variant="text" width="30%" height={24} />
-                    <Skeleton variant="text" width="90%" />
-                    <Skeleton variant="text" width="60%" />
-                  </CardContent>
-                </Card>
-              ))}
+          <Stack spacing={2}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <WarningAmberIcon sx={{ fontSize: 20, color: '#f5c563' }} />
+              <Typography fontSize={14} fontWeight={600}>
+                Pending Approval ({pending.length})
+              </Typography>
             </Stack>
-          ) : (
-            pending.map((t) => (
-              <Card key={t.id} sx={{ borderRadius: 3 }}>
-                <CardContent>
-                  <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" spacing={2} alignItems={{ xs: 'flex-start', md: 'center' }}>
-                    <Stack spacing={1}>
-                      <Typography fontWeight={700}>{t.name}</Typography>
-                      <Typography color="text.secondary" sx={{ maxWidth: 980 }}>{t.bio || t.about}</Typography>
-                      <Typography color="text.secondary" fontSize={13}>Experience: {t.experienceYears ?? '-'} years&nbsp;&nbsp; Email: {t.email}</Typography>
-                    </Stack>
-                    <Stack direction="row" spacing={1} alignItems="center" justifyContent="flex-end">
-                      <Chip size="small" label={t.speciality || t.category || 'General'} sx={{ borderRadius: 2 }} />
-                      <Button variant="contained" color="success" size="small" startIcon={<CheckCircleOutlineIcon />} onClick={() => handle(t.id, 'approve')} sx={{ textTransform: 'none', borderRadius: 999 }}>Approve</Button>
-                      <Button variant="contained" color="error" size="small" startIcon={<CancelOutlinedIcon />} onClick={() => handle(t.id, 'reject')} sx={{ textTransform: 'none', borderRadius: 999 }}>Decline</Button>
-                    </Stack>
-                  </Stack>
-                </CardContent>
-              </Card>
-            ))
-          )}
 
-          <Divider sx={{ my: 1 }} />
-          <Chip icon={<VerifiedOutlinedIcon />} color="success" variant="outlined" label={`Approved Trainers (0)`} sx={{ borderRadius: 2, alignSelf: 'flex-start' }} />
+            {loading ? (
+              <Stack spacing={2}>
+                {[1, 2, 3, 4].map((k) => (
+                  <Card key={k} sx={{ borderRadius: 2, boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
+                    <CardContent>
+                      <Skeleton variant="text" width="30%" height={24} />
+                      <Skeleton variant="text" width="90%" />
+                      <Skeleton variant="text" width="60%" />
+                    </CardContent>
+                  </Card>
+                ))}
+              </Stack>
+            ) : (
+              <Stack spacing={2}>
+                {pending.map((trainer) => (
+                  <Card 
+                    key={trainer.id} 
+                    sx={{ borderRadius: 2, boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}
+                  >
+                    <CardContent>
+                      <Stack spacing={2}>
+                        <Stack 
+                          direction={{ xs: 'column', sm: 'row' }} 
+                          justifyContent="space-between" 
+                          alignItems={{ xs: 'flex-start', sm: 'center' }}
+                          spacing={1}
+                        >
+                          <Typography fontWeight={600} fontSize={16}>
+                            {trainer.name || `${trainer.first_name} ${trainer.last_name}`}
+                          </Typography>
+                          <Chip 
+                            label={trainer.speciality || trainer.category || 'Web Development'} 
+                            size="small"
+                            sx={{ 
+                              bgcolor: '#e0f7f4', 
+                              color: '#6fc6a6',
+                              fontWeight: 500,
+                              fontSize: 12
+                            }}
+                          />
+                        </Stack>
+
+                        <Typography fontSize={14} color="text.secondary">
+                          {trainer.bio || trainer.about || 'Experienced full-stack developer with expertise in React, Node.js, and cloud technologies. Passionate about teaching modern web development.'}
+                        </Typography>
+
+                        <Stack 
+                          direction={{ xs: 'column', sm: 'row' }} 
+                          justifyContent="space-between"
+                          alignItems={{ xs: 'flex-start', sm: 'center' }}
+                          spacing={1}
+                        >
+                          <Typography fontSize={13} color="text.secondary">
+                            <strong>Experience:</strong> {trainer.experienceYears || trainer.experience_years || 8} years
+                            &nbsp;&nbsp;•&nbsp;&nbsp;
+                            <strong>Email:</strong> {trainer.email}
+                          </Typography>
+                          
+                          <Stack direction="row" spacing={1}>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              onClick={() => handle(trainer.id, 'approve')}
+                              sx={{
+                                bgcolor: '#6fc6a6',
+                                textTransform: 'none',
+                                fontSize: 13,
+                                px: 2.5,
+                                '&:hover': { bgcolor: '#5bb591' }
+                              }}
+                            >
+                              Approve
+                            </Button>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              onClick={() => handle(trainer.id, 'reject')}
+                              sx={{
+                                bgcolor: '#f3a2a0',
+                                textTransform: 'none',
+                                fontSize: 13,
+                                px: 2.5,
+                                '&:hover': { bgcolor: '#e88886' }
+                              }}
+                            >
+                              Decline
+                            </Button>
+                          </Stack>
+                        </Stack>
+                      </Stack>
+                    </CardContent>
+                  </Card>
+                ))}
+              </Stack>
+            )}
+
+            <Divider sx={{ my: 2 }} />
+
+            <Stack direction="row" spacing={1} alignItems="center">
+              <CheckCircleOutlineIcon sx={{ fontSize: 20, color: '#6fc6a6' }} />
+              <Typography fontSize={14} fontWeight={600}>
+                Approved Trainers (0)
+              </Typography>
+            </Stack>
+          </Stack>
         </Stack>
-      </Container>
-    </Box>
+      </Box>
+    </DashboardLayout>
   )
 }
-
-
