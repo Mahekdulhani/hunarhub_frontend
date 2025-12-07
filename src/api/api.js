@@ -67,12 +67,13 @@ export async function getPendingTrainers() {
 }
 
 export async function approveTrainer(trainerId) {
-  const { data } = await client.post(`/admin/trainers/${trainerId}/approve`)
+  const { data } = await client.post(`/admin/approve-trainer-profile/${trainerId}`)
   return data
 }
 
 export async function rejectTrainer(trainerId) {
-  const { data } = await client.post(`/admin/trainers/${trainerId}/reject`)
+  const payload = { "reason" : "not real"}
+  const { data } = await client.post(`admin/reject-trainer-profile/${trainerId}`,payload)
   return data
 }
 

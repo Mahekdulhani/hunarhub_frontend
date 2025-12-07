@@ -57,7 +57,11 @@ export default function TrainersPage() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((trainer) => (
+
+                  {rows
+    .map((trainer) => (
+                   
+
                     <TableRow key={trainer.id} hover>
                       <TableCell sx={{ fontSize: 14 }}>
                         {trainer.first_name} {trainer.last_name}
@@ -98,6 +102,7 @@ export default function TrainersPage() {
                         </Stack>
                       </TableCell>
                     </TableRow>
+                    
                   ))}
                 </TableBody>
               </Table>
