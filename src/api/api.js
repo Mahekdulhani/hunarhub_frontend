@@ -1,7 +1,9 @@
 import axios from 'axios'
 
 // Single API module for all HTTP communication
-const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api'
+// const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api'
+// 'https://dextrosinistral-hector-secondly.ngrok-free.dev'
+const baseURL = import.meta.env.VITE_API_BASE_URL || 'https://dextrosinistral-hector-secondly.ngrok-free.dev/api'
 
 const client = axios.create({
   baseURL,
@@ -94,7 +96,7 @@ export async function getTrainers() {
 export async function fetchCourses(status) {
   try {
     const queryParams = status ? `?status=${status}` : '';
-    const response = await fetch(`${API_BASE_URL}/courses${queryParams}`, {
+    const response = await fetch(`${baseURL}/courses${queryParams}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -126,7 +128,7 @@ export async function fetchCourses(status) {
  */
 export async function fetchCourseDetail(courseId) {
   try {
-    const response = await fetch(`${API_BASE_URL}/courses/${courseId}`, {
+    const response = await fetch(`${baseURL}/courses/${courseId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -158,7 +160,7 @@ export async function fetchCourseDetail(courseId) {
  */
 export async function approveCourse(courseId) {
   try {
-    const response = await fetch(`${API_BASE_URL}/courses/${courseId}/approve`, {
+    const response = await fetch(`${baseURL}/courses/${courseId}/approve`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -195,7 +197,7 @@ export async function approveCourse(courseId) {
  */
 export async function rejectCourse(courseId, reason) {
   try {
-    const response = await fetch(`${API_BASE_URL}/courses/${courseId}/reject`, {
+    const response = await fetch(`${baseURL}/courses/${courseId}/reject`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

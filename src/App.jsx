@@ -9,6 +9,7 @@ import DashboardPage from './pages/dashboard/DashboardPage'
 import TrainerApprovalPage from './pages/trainers/TrainerApprovalPage'
 import TrainersPage from './pages/trainers/TrainersPage'
 import StudentsPage from './pages/students/StudentsPage'
+import { CourseApproval } from './pages/CourseApproval/CourseApproval'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/verify-otp" element={<VerifyOtpPage />} />
         <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
         <Route path="/trainer-approval" element={<ProtectedRoute><TrainerApprovalPage /></ProtectedRoute>} />
+        <Route path="/course-approval" element={<ProtectedRoute><CourseApproval /></ProtectedRoute>} />
         <Route path="/trainers" element={<ProtectedRoute><TrainersPage /></ProtectedRoute>} />
         <Route path="/students" element={<ProtectedRoute><StudentsPage /></ProtectedRoute>} />
       </Routes>
