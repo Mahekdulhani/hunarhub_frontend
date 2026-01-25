@@ -1,9 +1,9 @@
 import axios from 'axios'
 
 // Single API module for all HTTP communication
-// const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api'
+const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api'
 // 'https://dextrosinistral-hector-secondly.ngrok-free.dev'
-const baseURL = import.meta.env.VITE_API_BASE_URL || 'http:localhost:3000'
+// const baseURL = import.meta.env.VITE_API_BASE_URL || 'https://dextrosinistral-hector-secondly.ngrok-free.dev/api'
 
 const client = axios.create({
   baseURL,
@@ -36,6 +36,21 @@ export async function verifyOtp(payload) {
   // payload: { email, otp }
   const { data } = await client.post('/verify-otp', payload)
   return data
+}
+export async function fetchPendingCourses() {
+const { data } = await client.get("/admin/pending-courses");
+return data;
+}
+export async function approveCourses(courseId) {
+const { data } = await client.post(`/admin/approve/${courseId}`);
+return data;
+}
+
+
+// 🔹 Reject course
+export async function rejectCourses(courseId) {
+const { data } = await client.post(`/admin/reject/${courseId}`);
+return data;
 }
 
 export function setAuthToken(token) {
@@ -231,9 +246,9 @@ export async function rejectCourse(courseId, reason) {
  * Fetch pending courses only (helper function)
  * @returns {Promise<Array>} Promise with array of pending courses
  */
-export async function fetchPendingCourses() {
-  return fetchCourses('pending');
-}
+// export async function fetchPendingCourses() {
+//   return fetchCourses('pending');
+// }
 
 /**
  * Fetch approved courses only (helper function)

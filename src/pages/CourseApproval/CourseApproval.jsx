@@ -238,7 +238,11 @@ import {
   BookOpen,
   IndianRupee,
 } from "lucide-react";
-
+import {
+fetchPendingCourses,
+approveCourses,
+rejectCourses,
+} from '../../api/api';
 export default function CourseApproval() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -249,30 +253,36 @@ export default function CourseApproval() {
   const REJECT_API = "http://localhost:3000/api/admin/reject";
 
   useEffect(() => {
-    fetchCourses();
+    loadCourses();
   }, []);
 
-  const fetchCourses = async () => {
-    try {
-      const res = await fetch(FETCH_API);
-      const data = await res.json();
-      setCourses(data);
-    } catch (err) {
-      console.error("Failed to fetch courses", err);
-    } finally {
-      setLoading(false);
-    }
+  const loadCourses = async () => {
+try {
+  const data = await fetchPendingCourses();
+  setCourses(data);
+  } catch (err) {
+  console.error("Failed to fetch courses", err);
+  } finally {
+  setLoading(false);
+  }
   };
-
-  const handleApprove = async (id) => {
-    await fetch(`${APPROVE_API}/${id}`, { method: "POST" });
-    setCourses((prev) => prev.filter((c) => c.id !== id));
-  };
+ const handleApprove = async (id) => {
+try {
+await approveCourses(id);
+setCourses((prev) => prev.filter((c) => c.id !== id));
+} catch (err) {
+console.error("Approve failed", err);
+}
+};
 
   const handleReject = async (id) => {
-    await fetch(`${REJECT_API}/${id}`, { method: "POST" });
-    setCourses((prev) => prev.filter((c) => c.id !== id));
-  };
+try {
+await rejectCourses(id);
+setCourses((prev) => prev.filter((c) => c.id !== id));
+} catch (err) {
+console.error("Reject failed", err);
+}
+};
 
   if (loading) return <p>Loading...</p>;
 
