@@ -230,146 +230,134 @@
 //     </div>
 //   );
 // }
+import { useEffect, useState } from "react";
+import {
+  CheckCircle,
+  XCircle,
+  Clock,
+  BookOpen,
+  IndianRupee,
+} from "lucide-react";
 
+export default function CourseApproval() {
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-import { useState } from "react";
-import { CheckCircle2, XCircle, Clock, BookOpen, IndianRupee } from "lucide-react";
+  // 🔹 API URLs (replace with real ones)
+  const FETCH_API = "http://localhost:3000/api/admin/pending-courses";
+  const APPROVE_API = "http://localhost:3000/api/admin/approve";
+  const REJECT_API = "http://localhost:3000/api/admin/reject";
 
-const initialCourses = [
-  {
-    id: "1",
-    title: "Full Stack Web Development Bootcamp",
-    trainerName: "Sarah Johnson",
-    category: "Web Development",
-    status: "pending",
-    description: "Comprehensive bootcamp covering React, Node.js, MongoDB, and modern web development practices.",
-    duration: "12 weeks",
-    price: 15999,
-    level: "Intermediate",
-    enrollmentType: "Both",
-  },
-  {
-    id: "2",
-    title: "Digital Marketing Mastery",
-    trainerName: "Michael Chen",
-    category: "Digital Marketing",
-    status: "pending",
-    description: "Master SEO, social media marketing, email campaigns, and analytics.",
-    duration: "8 weeks",
-    price: 12999,
-    level: "Beginner",
-    enrollmentType: "Online",
-  },
-];
+  useEffect(() => {
+    fetchCourses();
+  }, []);
 
-export function CourseApproval({ onViewDetails }) {
-  const [courses, setCourses] = useState(initialCourses);
-
-  const handleApprove = (id) => {
-    setCourses(courses.map(c => c.id === id ? { ...c, status: "approved" } : c));
+  const fetchCourses = async () => {
+    try {
+      const res = await fetch(FETCH_API);
+      const data = await res.json();
+      setCourses(data);
+    } catch (err) {
+      console.error("Failed to fetch courses", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleReject = (id) => {
-    setCourses(courses.map(c => c.id === id ? { ...c, status: "rejected" } : c));
+  const handleApprove = async (id) => {
+    await fetch(`${APPROVE_API}/${id}`, { method: "POST" });
+    setCourses((prev) => prev.filter((c) => c.id !== id));
   };
 
-  const pending = courses.filter(c => c.status === "pending");
-  const approved = courses.filter(c => c.status === "approved");
-  const rejected = courses.filter(c => c.status === "rejected");
+  const handleReject = async (id) => {
+    await fetch(`${REJECT_API}/${id}`, { method: "POST" });
+    setCourses((prev) => prev.filter((c) => c.id !== id));
+  };
+
+  if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="space-y-8">
+    <div className="p-6 space-y-6">
+      {/* Header */}
       <div>
-        <h2 className="text-2xl font-semibold">Course Approval</h2>
-        <p className="text-gray-500">Review and approve courses posted by trainers</p>
+        <h2 className="text-xl font-semibold">Course Approval</h2>
+        <p className="text-gray-500">
+          Review and approve courses posted by trainers
+        </p>
       </div>
 
-      {/* Pending */}
-      <section>
+      {/* Pending Section */}
+      <div>
         <div className="flex items-center gap-2 mb-4">
-          <Clock className="text-amber-600" />
-          <h3 className="text-lg font-semibold">
-            Pending Approval ({pending.length})
+          <Clock className="w-5 h-5 text-orange-500" />
+          <h3 className="font-semibold">
+            Pending Approval ({courses.length})
           </h3>
         </div>
 
-        {pending.map(course => (
-          <div
-            key={course.id}
-            className="bg-white border rounded-lg p-4 shadow-sm space-y-3"
-          >
-            <button
-              onClick={() => onViewDetails(course.id)}
-              className="text-left font-semibold text-lg hover:text-teal-600"
+        <div className="space-y-4">
+          {courses.map((course) => (
+            <div
+              key={course.id}
+              className="bg-white rounded-xl p-4 shadow flex flex-col md:flex-row justify-between gap-4"
             >
-              {course.title}
-            </button>
+              {/* Left */}
+              <div className="space-y-2">
+                <h4 className="font-semibold">{course.title}</h4>
+                <p className="text-gray-500 text-sm">{course.description}</p>
 
-            <p className="text-gray-600">{course.description}</p>
+                <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                  <span className="flex items-center gap-1">
+                    <BookOpen className="w-4 h-4 text-teal-600" />
+                    {course.duration}
+                  </span>
 
-            <div className="flex flex-wrap gap-4 text-sm text-gray-700">
-              <span className="flex items-center gap-1">
-                <BookOpen size={16} /> {course.duration}
-              </span>
-              <span className="flex items-center gap-1">
-                <IndianRupee size={16} /> {course.price.toLocaleString()}
-              </span>
-              <span>Level: {course.level}</span>
-              <span>By: {course.trainerName}</span>
-            </div>
+                  <span className="flex items-center gap-1">
+                    <IndianRupee className="w-4 h-4 text-teal-600" />
+                    {course.price}
+                  </span>
 
-            <div className="flex gap-2 pt-2">
-              <button
-                onClick={() => handleApprove(course.id)}
-                className="flex items-center gap-1 px-4 py-2 bg-teal-600 text-white rounded-full hover:bg-teal-700"
-              >
-                <CheckCircle2 size={16} /> Approve
-              </button>
+                  <span>Level: {course.level}</span>
+                  <span>By: {course.trainerName}</span>
 
-              <button
-                onClick={() => handleReject(course.id)}
-                className="flex items-center gap-1 px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700"
-              >
-                <XCircle size={16} /> Decline
-              </button>
-            </div>
-          </div>
-        ))}
-      </section>
+                  <span className="px-2 py-0.5 rounded-full text-xs bg-gray-100">
+                    {course.enrollmentType}
+                  </span>
+                </div>
+              </div>
 
-      {/* Approved */}
-      <section>
-        <h3 className="text-lg font-semibold mb-3">
-          Approved Courses ({approved.length})
-        </h3>
+              {/* Right */}
+              <div className="flex items-center gap-3">
+                <span className="px-3 py-1 rounded-full text-xs bg-teal-100 text-teal-700">
+                  {course.category}
+                </span>
 
-        {approved.map(course => (
-          <div key={course.id} className="p-4 border rounded-lg bg-teal-50">
-            <strong>{course.title}</strong>
-            <p className="text-sm text-gray-600">
-              {course.category} • {course.trainerName}
-            </p>
-          </div>
-        ))}
-      </section>
+                <button
+                  onClick={() => handleApprove(course.id)}
+                  className="flex items-center gap-1 px-4 py-2 rounded-full bg-teal-500 text-white text-sm hover:bg-teal-600"
+                >
+                  <CheckCircle className="w-4 h-4" />
+                  Approve
+                </button>
 
-      {/* Rejected */}
-      {rejected.length > 0 && (
-        <section>
-          <h3 className="text-lg font-semibold mb-3 text-red-600">
-            Rejected Courses ({rejected.length})
-          </h3>
-
-          {rejected.map(course => (
-            <div key={course.id} className="p-4 border rounded-lg bg-red-50">
-              <strong>{course.title}</strong>
-              <p className="text-sm text-gray-600">
-                {course.category} • {course.trainerName}
-              </p>
+                <button
+                  onClick={() => handleReject(course.id)}
+                  className="flex items-center gap-1 px-4 py-2 rounded-full bg-red-500 text-white text-sm hover:bg-red-600"
+                >
+                  <XCircle className="w-4 h-4" />
+                  Decline
+                </button>
+              </div>
             </div>
           ))}
-        </section>
-      )}
+
+          {courses.length === 0 && (
+            <p className="text-center text-gray-500 py-6">
+              No pending courses
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
