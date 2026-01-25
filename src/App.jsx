@@ -9,7 +9,7 @@ import DashboardPage from './pages/dashboard/DashboardPage'
 import TrainerApprovalPage from './pages/trainers/TrainerApprovalPage'
 import TrainersPage from './pages/trainers/TrainersPage'
 import StudentsPage from './pages/students/StudentsPage'
-import { CourseApproval } from './pages/CourseApproval/CourseApproval'
+import CourseApproval from "./pages/CourseApproval/CourseApproval";
 
 function App() {
   return (
