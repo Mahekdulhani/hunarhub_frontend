@@ -3,7 +3,7 @@ import axios from 'axios'
 // Single API module for all HTTP communication
 // const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api'
 // 'https://dextrosinistral-hector-secondly.ngrok-free.dev'
-const baseURL = import.meta.env.VITE_API_BASE_URL || 'https://dextrosinistral-hector-secondly.ngrok-free.dev/api'
+const baseURL = import.meta.env.VITE_API_BASE_URL || 'http:localhost:3000'
 
 const client = axios.create({
   baseURL,
