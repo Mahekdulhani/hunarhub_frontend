@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { label: 'Trainer Approval', path: '/trainer-approval', icon: <CheckCircleOutlineIcon /> },
   { label: 'Students', path: '/students', icon: <PeopleOutlineIcon /> },
   { label: 'Trainers', path: '/trainers', icon: <SchoolOutlinedIcon /> },
+  { label: 'Course Approval', path: '/course-approval', icon: <CheckCircleOutlineIcon /> },
 ]
 
 export default function DashboardLayout({ children }) {

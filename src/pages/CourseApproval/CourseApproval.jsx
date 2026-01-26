@@ -489,10 +489,75 @@
 // }
 
 
+// import { useEffect, useState } from "react";
+// import { CheckCircle2, Clock } from "lucide-react";
+// import { fetchPendingCourses } from "../../api/api";
+// import DashboardLayout from '../../components/DashboardLayout'
+
+// export default function CourseApproval() {
+//   const [courses, setCourses] = useState([]);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     loadCourses();
+//   }, []);
+
+//   const loadCourses = async () => {
+//     try {
+//       const data = await fetchPendingCourses();
+//       setCourses(data);
+//     } catch (err) {
+//       console.error("Failed to fetch courses", err);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   if (loading) return <p className="p-6">Loading...</p>;
+
+//   return (
+//         <DashboardLayout>
+    
+//     <div className="p-8 bg-gray-50 min-h-screen">
+//       {/* Header */}
+//       <div className="mb-8">
+//         <h2 className="text-2xl font-semibold mb-1">Course Approval</h2>
+//         <p className="text-gray-500">Review and approve courses posted by trainers</p>
+//       </div>
+
+//       {/* Pending Approval */}
+//       <div className="mb-10">
+//         <div className="flex items-center gap-3 mb-3">
+//           <Clock className="w-5 h-5 text-gray-700" />
+//           <h3 className="text-lg font-semibold">Pending Approval ({courses.length})</h3>
+//         </div>
+
+//         {courses.length === 0 && (
+//           <p className="text-gray-600 ml-8">No pending courses</p>
+//         )}
+//       </div>
+
+//       {/* Approved Courses */}
+//       <div>
+//         <div className="flex items-center gap-3 mb-3">
+//           <CheckCircle2 className="w-5 h-5 text-gray-700" />
+//           <h3 className="text-lg font-semibold">Approved Courses (0)</h3>
+//         </div>
+//       </div>
+//     </div>
+//         </DashboardLayout>
+    
+//   );
+// }
+
+
 import { useEffect, useState } from "react";
-import { CheckCircle2, Clock } from "lucide-react";
-import { fetchPendingCourses } from "../../api/api";
-import DashboardLayout from '../../components/DashboardLayout'
+import { Clock, CheckCircle2, XCircle } from "lucide-react";
+import {
+  fetchPendingCourses,
+  approveCourses,
+  rejectCourses,
+} from "../../api/api";
 
 export default function CourseApproval() {
   const [courses, setCourses] = useState([]);
@@ -513,39 +578,92 @@ export default function CourseApproval() {
     }
   };
 
+  // ✅ MUST be before return
+  const handleApprove = async (id) => {
+    try {
+      await approveCourses(id);
+      setCourses((prev) => prev.filter((c) => c.id !== id));
+    } catch (err) {
+      console.error("Approve failed", err);
+    }
+  };
+
+  const handleReject = async (id) => {
+    try {
+      await rejectCourses(id);
+      setCourses((prev) => prev.filter((c) => c.id !== id));
+    } catch (err) {
+      console.error("Reject failed", err);
+    }
+  };
+
   if (loading) return <p className="p-6">Loading...</p>;
 
   return (
-        <DashboardLayout>
-    
+    <DashboardLayout>
     <div className="p-8 bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="mb-8">
-        <h2 className="text-2xl font-semibold mb-1">Course Approval</h2>
-        <p className="text-gray-500">Review and approve courses posted by trainers</p>
+        <h2 className="text-2xl font-semibold">Course Approval</h2>
+        <p className="text-gray-500">
+          Review and approve courses posted by trainers
+        </p>
       </div>
 
       {/* Pending Approval */}
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-3">
-          <Clock className="w-5 h-5 text-gray-700" />
-          <h3 className="text-lg font-semibold">Pending Approval ({courses.length})</h3>
+          <Clock className="w-5 h-5" />
+          <h3 className="text-lg font-semibold">
+            Pending Approval ({courses.length})
+          </h3>
         </div>
 
         {courses.length === 0 && (
-          <p className="text-gray-600 ml-8">No pending courses</p>
+          <p className="ml-8 text-gray-600">No pending courses</p>
         )}
+
+        {courses.map((course) => (
+          <div
+            key={course.id}
+            className="ml-8 mb-4 flex items-center justify-between max-w-3xl"
+          >
+            <div>
+              <p className="font-medium">{course.title}</p>
+              <p className="text-sm text-gray-500">
+                By {course.trainerName}
+              </p>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => handleApprove(course.id)}
+                className="flex items-center gap-1 text-sm text-green-600 hover:underline"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                Approve
+              </button>
+
+              <button
+                onClick={() => handleReject(course.id)}
+                className="flex items-center gap-1 text-sm text-red-600 hover:underline"
+              >
+                <XCircle className="w-4 h-4" />
+                Reject
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Approved Courses */}
-      <div>
-        <div className="flex items-center gap-3 mb-3">
-          <CheckCircle2 className="w-5 h-5 text-gray-700" />
+      {/* <div>
+        <div className="flex items-center gap-3">
+          <CheckCircle2 className="w-5 h-5" />
           <h3 className="text-lg font-semibold">Approved Courses (0)</h3>
         </div>
-      </div>
+      </div> */}
     </div>
-        </DashboardLayout>
-    
+    </DashboardLayout>
   );
 }
