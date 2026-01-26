@@ -47,8 +47,7 @@ export async function fetchPendingCourses() {
   try {
     const response = await fetch(`${baseURL}/admin/pending-courses`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
+      headers: {\
         'Authorization': `Bearer ${getAuthToken()}`,
       },
     });
