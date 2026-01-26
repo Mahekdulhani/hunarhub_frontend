@@ -369,9 +369,129 @@
 
 
 
+// import { useEffect, useState } from "react";
+// import { CheckCircle2, XCircle, Clock, BookOpen, IndianRupee } from "lucide-react";
+// import { fetchPendingCourses, approveCourses, rejectCourses } from "../../api/api";
+
+// export default function CourseApproval() {
+//   const [courses, setCourses] = useState([]);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     loadCourses();
+//   }, []);
+
+//   const loadCourses = async () => {
+//     try {
+//       const data = await fetchPendingCourses();
+//       setCourses(data);
+//     } catch (err) {
+//       console.error("Failed to fetch courses", err);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleApprove = async (id) => {
+//     await approveCourses(id);
+//     setCourses((prev) => prev.filter((c) => c.id !== id));
+//   };
+
+//   const handleReject = async (id) => {
+//     await rejectCourses(id);
+//     setCourses((prev) => prev.filter((c) => c.id !== id));
+//   };
+
+//   if (loading) return <p className="p-6">Loading...</p>;
+
+//   return (
+//     <div className="p-6 space-y-6 bg-[#faf7f2] min-h-screen">
+//       {/* Header */}
+//       <div>
+//         <h2 className="text-2xl font-semibold">Course Approval</h2>
+//         <p className="text-gray-500">Review and approve courses posted by trainers</p>
+//       </div>
+
+//       {/* Pending */}
+//       <div className="space-y-4">
+//         <div className="flex items-center gap-2">
+//           <Clock className="w-5 h-5 text-orange-500" />
+//           <h3 className="font-semibold">Pending Approval ({courses.length})</h3>
+//         </div>
+
+//         {courses.map((course) => (
+//           <div
+//             key={course.id}
+//             className="bg-white rounded-xl shadow-sm p-5 flex flex-col md:flex-row md:items-start md:justify-between gap-4"
+//           >
+//             {/* Left */}
+//             <div className="space-y-2 flex-1">
+//               <div className="flex items-start justify-between gap-3">
+//                 <h4 className="font-semibold">{course.title}</h4>
+//                 <span className="text-xs px-3 py-1 rounded-full bg-teal-100 text-teal-700">
+//                   {course.category}
+//                 </span>
+//               </div>
+
+//               <p className="text-gray-500 text-sm">{course.description}</p>
+
+//               <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+//                 <span className="flex items-center gap-1">
+//                   <BookOpen className="w-4 h-4 text-teal-600" />
+//                   {course.duration}
+//                 </span>
+//                 <span className="flex items-center gap-1">
+//                   <IndianRupee className="w-4 h-4 text-teal-600" />
+//                   {course.price.toLocaleString()}
+//                 </span>
+//                 <span>Level: {course.level}</span>
+//                 <span>By: {course.trainerName}</span>
+//                 <span className="px-2 py-0.5 rounded-full text-xs border">
+//                   {course.enrollmentType}
+//                 </span>
+//               </div>
+//             </div>
+
+//             {/* Right */}
+//             <div className="flex items-center gap-3">
+//               <button
+//                 onClick={() => handleApprove(course.id)}
+//                 className="flex items-center gap-1 px-4 py-2 rounded-full bg-teal-500 text-white text-sm hover:bg-teal-600"
+//               >
+//                 <CheckCircle2 className="w-4 h-4" />
+//                 Approve
+//               </button>
+//               <button
+//                 onClick={() => handleReject(course.id)}
+//                 className="flex items-center gap-1 px-4 py-2 rounded-full bg-red-500 text-white text-sm hover:bg-red-600"
+//               >
+//                 <XCircle className="w-4 h-4" />
+//                 Decline
+//               </button>
+//             </div>
+//           </div>
+//         ))}
+
+//         {courses.length === 0 && (
+//           <div className="text-center text-gray-500 py-10">No pending courses</div>
+//         )}
+//       </div>
+
+//       {/* Approved (empty state like screenshot) */}
+//       <div className="pt-6">
+//         <div className="flex items-center gap-2">
+//           <CheckCircle2 className="w-5 h-5 text-green-600" />
+//           <h3 className="font-semibold">Approved Courses (0)</h3>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+
 import { useEffect, useState } from "react";
-import { CheckCircle2, XCircle, Clock, BookOpen, IndianRupee } from "lucide-react";
-import { fetchPendingCourses, approveCourses, rejectCourses } from "../../api/api";
+import { CheckCircle2, Clock } from "lucide-react";
+import { fetchPendingCourses } from "../../api/api";
 
 export default function CourseApproval() {
   const [courses, setCourses] = useState([]);
@@ -392,96 +512,33 @@ export default function CourseApproval() {
     }
   };
 
-  const handleApprove = async (id) => {
-    await approveCourses(id);
-    setCourses((prev) => prev.filter((c) => c.id !== id));
-  };
-
-  const handleReject = async (id) => {
-    await rejectCourses(id);
-    setCourses((prev) => prev.filter((c) => c.id !== id));
-  };
-
   if (loading) return <p className="p-6">Loading...</p>;
 
   return (
-    <div className="p-6 space-y-6 bg-[#faf7f2] min-h-screen">
+    <div className="p-8 bg-gray-50 min-h-screen">
       {/* Header */}
-      <div>
-        <h2 className="text-2xl font-semibold">Course Approval</h2>
+      <div className="mb-8">
+        <h2 className="text-2xl font-semibold mb-1">Course Approval</h2>
         <p className="text-gray-500">Review and approve courses posted by trainers</p>
       </div>
 
-      {/* Pending */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-2">
-          <Clock className="w-5 h-5 text-orange-500" />
-          <h3 className="font-semibold">Pending Approval ({courses.length})</h3>
+      {/* Pending Approval */}
+      <div className="mb-10">
+        <div className="flex items-center gap-3 mb-3">
+          <Clock className="w-5 h-5 text-gray-700" />
+          <h3 className="text-lg font-semibold">Pending Approval ({courses.length})</h3>
         </div>
 
-        {courses.map((course) => (
-          <div
-            key={course.id}
-            className="bg-white rounded-xl shadow-sm p-5 flex flex-col md:flex-row md:items-start md:justify-between gap-4"
-          >
-            {/* Left */}
-            <div className="space-y-2 flex-1">
-              <div className="flex items-start justify-between gap-3">
-                <h4 className="font-semibold">{course.title}</h4>
-                <span className="text-xs px-3 py-1 rounded-full bg-teal-100 text-teal-700">
-                  {course.category}
-                </span>
-              </div>
-
-              <p className="text-gray-500 text-sm">{course.description}</p>
-
-              <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-                <span className="flex items-center gap-1">
-                  <BookOpen className="w-4 h-4 text-teal-600" />
-                  {course.duration}
-                </span>
-                <span className="flex items-center gap-1">
-                  <IndianRupee className="w-4 h-4 text-teal-600" />
-                  {course.price.toLocaleString()}
-                </span>
-                <span>Level: {course.level}</span>
-                <span>By: {course.trainerName}</span>
-                <span className="px-2 py-0.5 rounded-full text-xs border">
-                  {course.enrollmentType}
-                </span>
-              </div>
-            </div>
-
-            {/* Right */}
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => handleApprove(course.id)}
-                className="flex items-center gap-1 px-4 py-2 rounded-full bg-teal-500 text-white text-sm hover:bg-teal-600"
-              >
-                <CheckCircle2 className="w-4 h-4" />
-                Approve
-              </button>
-              <button
-                onClick={() => handleReject(course.id)}
-                className="flex items-center gap-1 px-4 py-2 rounded-full bg-red-500 text-white text-sm hover:bg-red-600"
-              >
-                <XCircle className="w-4 h-4" />
-                Decline
-              </button>
-            </div>
-          </div>
-        ))}
-
         {courses.length === 0 && (
-          <div className="text-center text-gray-500 py-10">No pending courses</div>
+          <p className="text-gray-600 ml-8">No pending courses</p>
         )}
       </div>
 
-      {/* Approved (empty state like screenshot) */}
-      <div className="pt-6">
-        <div className="flex items-center gap-2">
-          <CheckCircle2 className="w-5 h-5 text-green-600" />
-          <h3 className="font-semibold">Approved Courses (0)</h3>
+      {/* Approved Courses */}
+      <div>
+        <div className="flex items-center gap-3 mb-3">
+          <CheckCircle2 className="w-5 h-5 text-gray-700" />
+          <h3 className="text-lg font-semibold">Approved Courses (0)</h3>
         </div>
       </div>
     </div>
