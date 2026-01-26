@@ -59,8 +59,8 @@ export async function fetchPendingCourses() {
     const data = await response.json();
     console.log(data);
     
-    if (data.success && data.data) {
-      return data.data;
+    if (data) {
+      return data;
     } else {
       throw new Error(data.error || 'Failed to fetch courses');
     }
