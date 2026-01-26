@@ -37,9 +37,38 @@ export async function verifyOtp(payload) {
   const { data } = await client.post('/verify-otp', payload)
   return data
 }
+// export async function fetchPendingCourses() {
+// const { data } = await client.get("/admin/pending-courses");
+// return data;
+// }
+
+
 export async function fetchPendingCourses() {
-const { data } = await client.get("/admin/pending-courses");
-return data;
+  try {
+    const response = await fetch(`${baseURL}/admin/pending-courses`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getAuthToken()}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(data);
+    
+    if (data.success && data.data) {
+      return data.data;
+    } else {
+      throw new Error(data.error || 'Failed to fetch courses');
+    }
+  } catch (error) {
+    console.error('Error fetching courses:', error);
+    throw error;
+  }
 }
 export async function approveCourses(courseId) {
 const { data } = await client.post(`/admin/approve/${courseId}`);
