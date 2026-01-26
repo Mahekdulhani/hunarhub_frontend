@@ -492,6 +492,7 @@
 import { useEffect, useState } from "react";
 import { CheckCircle2, Clock } from "lucide-react";
 import { fetchPendingCourses } from "../../api/api";
+import DashboardLayout from '../../components/DashboardLayout'
 
 export default function CourseApproval() {
   const [courses, setCourses] = useState([]);
@@ -515,6 +516,8 @@ export default function CourseApproval() {
   if (loading) return <p className="p-6">Loading...</p>;
 
   return (
+        <DashboardLayout>
+    
     <div className="p-8 bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="mb-8">
@@ -542,5 +545,7 @@ export default function CourseApproval() {
         </div>
       </div>
     </div>
+        </DashboardLayout>
+    
   );
 }
