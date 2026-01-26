@@ -47,7 +47,7 @@ export async function fetchPendingCourses() {
   try {
     const response = await fetch(`${baseURL}/admin/pending-courses`, {
       method: 'GET',
-      headers: {\
+      headers: {
         'Authorization': `Bearer ${getAuthToken()}`,
       },
     });
@@ -300,7 +300,7 @@ export async function fetchRejectedCourses() {
  */
 function getAuthToken() {
   // Replace this with your actual auth token retrieval logic
-  return localStorage.getItem('authToken') || '';
+  return localStorage.getItem('hh_token') || '';
 }
 
 // ============================================
