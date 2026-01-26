@@ -558,6 +558,7 @@ import {
   approveCourses,
   rejectCourses,
 } from "../../api/api";
+import DashboardLayout from '../../components/DashboardLayout'
 
 export default function CourseApproval() {
   const [courses, setCourses] = useState([]);
