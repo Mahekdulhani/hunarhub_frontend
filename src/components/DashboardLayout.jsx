@@ -4,6 +4,8 @@ import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline'
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined'
+import FeedbackOutlinedIcon from '@mui/icons-material/FeedbackOutlined'
+import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined'
 import { useAuth } from '../context/AuthContext'
 
 const DRAWER_WIDTH = 240
@@ -14,6 +16,8 @@ const NAV_ITEMS = [
   { label: 'Students', path: '/students', icon: <PeopleOutlineIcon /> },
   { label: 'Trainers', path: '/trainers', icon: <SchoolOutlinedIcon /> },
   { label: 'Course Approval', path: '/course-approval', icon: <CheckCircleOutlineIcon /> },
+  { label: 'Feedback', path: '/feedback', icon: <FeedbackOutlinedIcon /> },
+  { label: 'Complaints', path: '/complaints', icon: <ReportProblemOutlinedIcon /> },
 ]
 
 export default function DashboardLayout({ children }) {

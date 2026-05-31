@@ -1,25 +1,20 @@
-import { TextField } from '@mui/material'
 import { Controller } from 'react-hook-form'
+import { TextField } from '@mui/material'
 
-export default function RHFTextField({ name, control, label, type = 'text', ...rest }) {
+export default function RHFTextField({ name, control, ...rest }) {
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue=""
       render={({ field, fieldState }) => (
         <TextField
           {...field}
-          label={label}
-          type={type}
+          {...rest}
+          fullWidth
           error={!!fieldState.error}
           helperText={fieldState.error?.message}
-          fullWidth
-          {...rest}
         />
       )}
     />
   )
 }
-
-

@@ -131,6 +131,24 @@ export async function getTrainers() {
   const { data } = await client.get('/admin/trainers')
   return data
 }
+
+export async function getAllFeedback() {
+  const { data } = await client.get('/feedback/admin/all')
+  return data
+}
+
+export async function getAllComplaints() {
+  const { data } = await client.get('/complaints/admin/all')
+  return data
+}
+
+export async function respondToComplaint(complaintId, adminResponse, status) {
+  const { data } = await client.post(`/complaints/admin/${complaintId}/respond`, {
+    admin_response: adminResponse,
+    status,
+  })
+  return data
+}
 /**
  * Fetch all courses with optional status filter
  * @param {string} [status] - Filter courses by status (pending, approved, rejected)
@@ -328,6 +346,4 @@ const approvedCourse = await approveCourse('course-id-123');
 const rejectedCourse = await rejectCourse('course-id-123', 'Does not meet quality standards');
 */
 
-export default { login, register, verifyOtp, getCurrentUser, getDashboard, setAuthToken, bootstrapAuth, getPendingTrainers, approveTrainer, rejectTrainer, getStudents, getTrainers }
-
-
+export default { login, register, verifyOtp, getCurrentUser, getDashboard, setAuthToken, bootstrapAuth, getPendingTrainers, approveTrainer, rejectTrainer, getStudents, getTrainers, getAllFeedback, getAllComplaints, respondToComplaint }

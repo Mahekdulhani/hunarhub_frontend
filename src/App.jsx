@@ -9,7 +9,9 @@ import DashboardPage from './pages/dashboard/DashboardPage'
 import TrainerApprovalPage from './pages/trainers/TrainerApprovalPage'
 import TrainersPage from './pages/trainers/TrainersPage'
 import StudentsPage from './pages/students/StudentsPage'
-import CourseApproval from "./pages/CourseApproval/CourseApproval";
+import CourseApproval from './pages/CourseApproval/CourseApproval'
+import FeedbackPage from './pages/feedback/FeedbackPage'
+import ComplaintsPage from './pages/complaints/ComplaintsPage'
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
         <Route path="/course-approval" element={<ProtectedRoute><CourseApproval /></ProtectedRoute>} />
         <Route path="/trainers" element={<ProtectedRoute><TrainersPage /></ProtectedRoute>} />
         <Route path="/students" element={<ProtectedRoute><StudentsPage /></ProtectedRoute>} />
+        <Route path="/feedback" element={<ProtectedRoute><FeedbackPage /></ProtectedRoute>} />
+        <Route path="/complaints" element={<ProtectedRoute><ComplaintsPage /></ProtectedRoute>} />
       </Routes>
     </AuthProvider>
   )
